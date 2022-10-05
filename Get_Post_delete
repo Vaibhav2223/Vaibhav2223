@@ -1,0 +1,53 @@
+// Post Method 
+
+self.onmessage = function(data, URL){
+  var currentData = data.data;
+  this.fetchUserSetting(currentData.usertoken);
+  fetch(URL, {
+    method: 'POST',
+    hearders: {
+      'usertoken': currentData.usertoken,
+      'Content-type': 'application/json'
+    }
+  });
+};
+  
+// Get Method
+
+Function clearSession(URL, userID, userToken, currentUUID){
+  var requestURL = URL;
+  fetch(requestURL, {
+    method: 'GET',
+    headers:{
+      'userId': userID,
+      'userToken': userToken
+    }
+  }).then(function (responce){
+    if(responce.ok){
+      responce.json().then(function (data){
+        if(data.responceCode === 200){
+          var deleteSessionarray = data.sessionList.filet(function(obj){
+            return obj.deviceId !== currentUUId;
+            });
+            this.deletesession(URL, deleteSessionArray, userToken);
+          }
+        });
+      }
+    }).catch(function(error) {
+        concole.error(error);
+    });
+}
+
+// Delete Method
+
+function deletesession(URL, uuid, token) {
+  var requestURL = URL;
+  var uuidList = uuid;
+  uuidList.forEach(function (uuid) {
+    fetch(requestURL, {
+    mathod: 'DELETE',
+    headers: {
+      'usertoken': token,
+      'uuId': uuid.deviceId
+    }
+  });
